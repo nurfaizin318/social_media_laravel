@@ -18,7 +18,7 @@ class Posts extends Model
     // Kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
         'user_id',
-        'content',
+        'content',  
         'media_type',
         'media_url',
     ];
@@ -26,7 +26,7 @@ class Posts extends Model
     // Relasi dengan model User
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'post_id');
     }
 
     // Relasi dengan model Comment

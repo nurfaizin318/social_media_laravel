@@ -22,15 +22,20 @@ class Friendships extends Model
         'status',
     ];
 
+    protected $attributes = [
+        'status' => 0, // Set default value for the 'status' attribute
+    ];
+
+
     // Relasi dengan model User untuk user_id1
     public function user1()
     {
-        return $this->belongsTo(User::class, 'user_id1', 'id');
+        return $this->belongsTo(User::class, 'user_id1', 'user_id');
     }
 
     // Relasi dengan model User untuk user_id2
     public function user2()
     {
-        return $this->belongsTo(User::class, 'user_id2', 'id');
+        return $this->belongsTo(User::class, 'user_id2', 'user_id');
     }
 }

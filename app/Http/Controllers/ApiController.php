@@ -10,9 +10,9 @@ class ApiController extends Controller
     {
         return response()->json([
             'success' => true,
-            'code' => $statusCode,
             'data' => $data,
-        ], $statusCode);
+            'message' => $message,
+        ], $statusCode);    
     }
 
     protected function errorResponse($message = 'Operation failed', $statusCode = 400)

@@ -28,7 +28,7 @@ class AuthController extends ApiController
         $user->password = $request -> password;
         $user->save();
 
-        return response()->json($user, 201);
+        return $this->successResponse($user, 'User created successfully', 201);
     }
 
     public function login(Request $request)

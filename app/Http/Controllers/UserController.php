@@ -32,7 +32,7 @@ class UserController extends ApiController
         ]);
 
         $user = User::create($request->all());
-        return response()->json($user, 201);
+        return $this->successResponse(['user' => $user], 'User created successfully', 201);
     }
 
     public function update(Request $request, $id)

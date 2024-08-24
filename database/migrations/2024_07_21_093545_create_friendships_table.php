@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('FriendshipID');
             $table->unsignedBigInteger('UserID1');
             $table->unsignedBigInteger('UserID2');
-            $table->boolean('status')->default('pending');
+            $table->boolean('status')->default('pending')->change();
             $table->timestamps();
             $table->foreign('UserID1')->references('UserID')->on('users')->onDelete('cascade');
             $table->foreign('UserID2')->references('UserID')->on('users')->onDelete('cascade');

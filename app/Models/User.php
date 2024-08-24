@@ -17,6 +17,9 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
+
+    protected $primaryKey = 'user_id';
+
     protected $fillable = [
         'username',
         'email',
@@ -54,7 +57,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTIdentifier()
     {
-        return "user_id";// or return $this->id; if you use 'id' as primary key
+        return $this->getKey();/// or return $this->id; if you use 'id' as primary key
     }
 
     /**
