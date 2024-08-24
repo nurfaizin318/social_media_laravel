@@ -9,33 +9,21 @@ class Friendships extends Model
 {
     use HasFactory;
 
-    // Nama tabel jika berbeda dengan konvensi default
     protected $table = 'friendships';
 
-    // Primary key jika berbeda dengan 'id'
-    protected $primaryKey = 'friendship_id';
-
-    // Kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
-        'user_id1',
-        'user_id2',
-        'status',
+        'from_id',
+        'to_id',
+        'time_stamp',
     ];
 
-    protected $attributes = [
-        'status' => 0, // Set default value for the 'status' attribute
-    ];
-
-
-    // Relasi dengan model User untuk user_id1
-    public function user1()
+    public function userFrom()
     {
-        return $this->belongsTo(User::class, 'user_id1', 'user_id');
+        return $this->belongsTo(User::class, 'from_id', 'id');
     }
 
-    // Relasi dengan model User untuk user_id2
-    public function user2()
+    public function userTo()
     {
-        return $this->belongsTo(User::class, 'user_id2', 'user_id');
+        return $this->belongsTo(User::class, 'to_id', 'id');
     }
 }

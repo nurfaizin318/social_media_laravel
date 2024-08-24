@@ -10,29 +10,22 @@ class Messages extends Model
 {
     use HasFactory;
 
-    // Nama tabel jika berbeda dengan konvensi default
     protected $table = 'messages';
 
-    // Primary key jika berbeda dengan 'id'
-    protected $primaryKey = 'message_id';
-
-    // Kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
-        'sender_id',
-        'receiver_id',
+        'from_id',
+        'to_id',
         'content',
-        'chat_room',
+        'time_stamp',
     ];
 
-    // Relasi dengan model User untuk pengirim
     public function sender()
     {
-        return $this->belongsTo(User::class, 'sender_id', 'id');
+        return $this->belongsTo(User::class, 'from_id', 'id');
     }
 
-    // Relasi dengan model User untuk penerima
     public function receiver()
     {
-        return $this->belongsTo(User::class, 'receiver_id', 'id');
+        return $this->belongsTo(User::class, 'to_id', 'id');
     }
 }

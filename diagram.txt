@@ -1,0 +1,59 @@
+Table user {
+    id INT [pk]
+    username VARCHAR(50) [unique]
+    email VARCHAR(100) [unique]
+    password VARCHAR(255)
+    bio TEXT
+    profile_picture VARCHAR(255)
+}
+
+Table post {
+    id INT [pk]
+    user_id INT [ref: > user.id]
+    Content TEXT
+    media_url VARCHAR(255)
+    time_stamp TIMESTAMP
+}
+
+Table comment {
+    id INT [pk]
+    post_id INT [ref: > post.id]
+    user_id INT [ref: > user.id]
+    content TEXT
+    time_stamp TIMESTAMP
+}
+
+Table like {
+    id INT [pk]
+    post_id INT [ref: > post.id]
+    comment_id INT [ref: > comment.id]
+    user_id INT [ref: > user.id]
+    time_stamp TIMESTAMP
+}
+
+Table friendship {
+    id INT [pk]
+    from_id INT [ref: > user.id]
+    to_id INT [ref: > user.id]
+    time_stamp TIMESTAMP
+}
+
+Table message {
+    id INT [pk]
+    from_id INT [ref: >user.id]
+    to_id INT [ref: >user.id]
+    content TEXT
+    time_stamp TIMESTAMP
+}
+
+Table notification {
+    id INT [pk]
+    UserID INT [ref: > user.id]
+    Type VARCHAR(50)
+    ReferenceID INT
+    time_stamp TIMESTAMP
+}
+
+Ref: notification.ReferenceID > like.id
+Ref: notification.ReferenceID > comment.id
+Ref: notification.ReferenceID > friendship.id

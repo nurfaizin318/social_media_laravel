@@ -9,22 +9,32 @@ class Notification extends Model
 {
     use HasFactory;
 
-    // Nama tabel jika berbeda dengan konvensi default
     protected $table = 'notifications';
 
-    // Primary key jika berbeda dengan 'id'
-    protected $primaryKey = 'notification_id';
-
-    // Kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
-        'user_id',
-        'type',
-        'reference_id',
+        'UserID',
+        'Type',
+        'ReferenceID',
+        'time_stamp',
     ];
 
-    // Relasi dengan model User
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'UserID', 'id');
+    }
+
+    public function like()
+    {
+        return $this->belongsTo(Likes::class, 'ReferenceID', 'id');
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comments::class, 'ReferenceID', 'id');
+    }
+
+    public function friendship()
+    {
+        return $this->belongsTo(Friendships::class, 'ReferenceID', 'id');
     }
 }

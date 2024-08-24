@@ -18,8 +18,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
 
-    protected $primaryKey = 'user_id';
-
     protected $fillable = [
         'username',
         'email',
@@ -49,6 +47,47 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function posts()
+    {
+        return $this->hasMany(Posts::class, 'user_id', 'id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class, 'user_id', 'id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Likes::class, 'user_id', 'id');
+    }
+
+    public function friendshipsFrom()
+    {
+        return $this->hasMany(Friendships::class, 'from_id', 'id');
+    }
+
+    public function friendshipsTo()
+    {
+        return $this->hasMany(Friendships::class, 'to_id', 'id');
+    }
+
+    public function messagesSent()
+    {
+        return $this->hasMany(Messages::class, 'from_id', 'id');
+    }
+
+    public function messagesReceived()
+    {
+        return $this->hasMany(Messages::class, 'to_id', 'id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'UserID', 'id');
+    }
 
     /**
      * Get the identifier for JWT.
