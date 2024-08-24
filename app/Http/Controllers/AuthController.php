@@ -38,7 +38,7 @@ class AuthController extends ApiController
         $credentials = request(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => $credentials], 401);
         }
 
         $user = User::where('email', $request -> email)->first();

@@ -1,0 +1,9 @@
+
+
+- failed  database chahce
+php artisan cache:table
+php artisan migrate
+php artisan cache:clear
+
+- route
+php artisan route:list

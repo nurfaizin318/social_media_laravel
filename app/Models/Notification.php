@@ -12,29 +12,29 @@ class Notification extends Model
     protected $table = 'notifications';
 
     protected $fillable = [
-        'UserID',
-        'Type',
-        'ReferenceID',
+        'user_id',
+        'type',
+        'reference_id',
         'time_stamp',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'UserID', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function like()
     {
-        return $this->belongsTo(Likes::class, 'ReferenceID', 'id');
+        return $this->belongsTo(Likes::class, 'reference_id', 'id');
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comments::class, 'ReferenceID', 'id');
+        return $this->belongsTo(Comments::class, 'reference_id', 'id');
     }
 
     public function friendship()
     {
-        return $this->belongsTo(Friendships::class, 'ReferenceID', 'id');
+        return $this->belongsTo(Friendships::class, 'reference_id', 'id');
     }
 }

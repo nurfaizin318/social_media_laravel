@@ -36,7 +36,7 @@ class FriendShipController extends ApiController
 
         // Mengirimkan respons sukses
         return response()->json([
-            'message' => "The friend request has been sent to user with '].",
+            'message' => "The friend request has been sent to user.",
             'data' => ""
         ], 201);
     }
