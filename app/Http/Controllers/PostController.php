@@ -4,20 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Posts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
 
 class PostController extends ApiController
 {
-    public function index(Request $request)
+    public function index($id)
     {
-        $validated = $request->validate([
-            "user_id" => "required"
-        ]);
 
-        $post = Posts::where("user_id", $validated["user_id"])->get();
-        if (!$post) {
+        $posts = Posts::where('user_id', $id)
+        ->withCount('comments')
+        ->withCount('likes')
+        ->get();
+        if (!$posts) {
             return response()->json(['message' => 'Post not found'], 404);
         }
-        return $this->successResponse($post, "success get posts", 200);
+
+        return $this->successResponse($posts, "success get posts", 200);
     }
 
     public function show(Request $request)
@@ -27,10 +30,12 @@ class PostController extends ApiController
         ]);
 
         $post = Posts::find($validated["user_id"]);
+        
         if (!$post) {
             return response()->json(['message' => 'Post not found'], 404);
         }
-        return response()->json($post);
+
+        return $this-> successResponse($post , "Success get Post", 200);
     }
 
     public function store(Request $request)
@@ -58,42 +63,50 @@ class PostController extends ApiController
         return $this->successResponse("","success add post",201);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
        
 
         $validator = $request->validate([
-            'user_id' => 'required|string',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
         ]);
 
-        $post = Posts::where("post_id","=", $validator["uder_id"])
-                ->where("user_id", "=", $validator["user_id"])
-                ->first();
+ 
+        $post = Posts::findOrFail($id);
 
         if (!$post) {
             return response()->json(['message' => 'Post not found'], 404);
         }
 
-        $post->update($request->all());
-        return response()->json($post);
+        if(File::exists($post->media_url)) {
+            File::delete($post->media_url);
+        }
+
+        $imageName = time().'.'.$request->image->extension();  
+
+        $request->image->move(public_path('images'), $imageName);
+
+        $imagePath = 'images/' . $imageName;
+
+        $validatedData['image'] = $imagePath;
+
+        $post->content = $validator['content'];
+        $post->media_url = $imagePath;
+        $post->save();
+
+        return $this->successResponse("","success update post",200);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $validated = $request->validate([
-            "user_id" => "required",
-            "post_id" => "required"
-        ]);
 
+        $post = Posts::find($id);
 
-        $post = Posts::where("post_id", $validated["post_id"])
-                ->where("user_id", $validated["user_id"])->first();
-
-
-        if (!$post) {
-            return $this->errorResponse("post not found", 400);
+        if(File::exists($post->media_url)) {
+            File::delete($post->media_url);
         }
+
 
         $post->delete();
         return response()->json(['message' => 'Post deleted']);

@@ -23,14 +23,12 @@ class FriendShipController extends ApiController
     public function requestFriendship(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'user_id1' => 'required',
-            'user_id2' => 'required',
-        ]);
+        $validator = $request->validate([
+            'from_id' => 'required',
+            'to_id' => 'required'
+         ]);
 
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->toJson(), 400);
-        }
+
         // Membuat entri pertemanan baru
         Friendships::create($request->all());
 
@@ -42,12 +40,10 @@ class FriendShipController extends ApiController
     }
 
 
-    public function showRequestFrindship(Request $request)
+    public function showRequestFrindship($id)
     {
         // Mengambil data pertemanan berdasarkan ID
-        $friendship = Friendships::where('user_id2','=', $request->input("id"))
-        ->where('status','=',0)
-        ->get();
+        $friendship = Friendships::where("to_id", $id)->get();
 
         if (!$friendship) {
             return response()->json(['message' => 'Friendship not found'], 404);
@@ -80,15 +76,15 @@ class FriendShipController extends ApiController
     {
         // Validasi input
         $validator = $request->validate([
-            'id' => 'required',
-            'user_id' => 'required',
+            'from_id' => 'required',
+            'to_id' => 'required',
          ]);
 
       
 
         // Mengambil data pertemanan berdasarkan ID
-        $friendship = Friendships::where('user_id2','=',$validator['user_id'])
-        ->where('friendship_id','=',$validator['id'])->first();
+        $friendship = Friendships::where('from_id', $validator['from_id'])
+        ->where('to_id','=',$validator['to_id'])->first();
 
         if (!$friendship) {
             return $this->errorResponse("friendship request not found", 400);

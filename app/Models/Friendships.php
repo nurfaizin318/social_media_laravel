@@ -14,6 +14,7 @@ class Friendships extends Model
     protected $fillable = [
         'from_id',
         'to_id',
+        'status',
         'time_stamp',
     ];
 

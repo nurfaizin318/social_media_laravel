@@ -4,6 +4,10 @@
 php artisan cache:table
 php artisan migrate
 php artisan cache:clear
+---------------------------
+php artisan migrate:refresh
 
 - route
 php artisan route:list
+php artisan route:cache
+php artisan route:clear

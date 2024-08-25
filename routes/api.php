@@ -3,7 +3,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendShipController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 
 Route::group([
@@ -22,8 +24,8 @@ Route::group([
     'prefix' => 'friendship'
 ], function ($router) {
 
-    Route::post('/', [FriendShipController::class, 'showRequestFrindship'])->middleware('auth:api')->name('firndshipRequestList');
-    Route::post('/friend', [FriendShipController::class, 'showFriendList'])->middleware('auth:api')->name('friendList');
+    Route::get('/{id}', [FriendShipController::class, 'showRequestFrindship'])->middleware('auth:api')->name('firndshipRequestList');
+    Route::get('/friend/{id}', [FriendShipController::class, 'showFriendList'])->middleware('auth:api')->name('friendList');
     Route::post('/request', [FriendShipController::class, 'requestFriendship'])->middleware('auth:api')->name('requestFriendship');
     Route::post('/accept', [FriendShipController::class, 'acceptFriendship'])->middleware('auth:api')->name('acceptFriendship');
 });
@@ -33,9 +35,31 @@ Route::group([
     'prefix' => 'post'
 ], function ($router) {
 
-    Route::post('/', [PostController::class, 'index'])->middleware('auth:api')->name('postList');
+    Route::get('/{id}', [PostController::class, 'index'])->middleware('auth:api')->name('postList');
     Route::post('/store', [PostController::class, 'store'])->middleware('auth:api')->name('postStore');
-    Route::post('/delete', [PostController::class, 'destroy'])->middleware('auth:api')->name('postDelete');
+    Route::post('/update/{id}', [PostController::class, 'update'])->middleware('auth:api')->name('postUpdate');
+    Route::delete('/{id}', [PostController::class, 'destroy'])->middleware('auth:api')->name('postDelete');
 
 
 });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'like'
+], function ($router) {
+
+    Route::post('/store', [LikesController::class, 'store'])->middleware('auth:api')->name('likeStore');
+    Route::delete('/{id}', [LikesController::class, 'destroy'])->middleware('auth:api')->name('likeDelete');
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'comment'
+], function ($router) {
+    Route::post('/{id}', [CommentController::class, 'index'])->middleware('auth:api')->name('postStore');
+    Route::post('/store', [CommentController::class, 'store'])->middleware('auth:api')->name('postStore');
+    Route::delete('/{id}', [CommentController::class, 'destroy'])->middleware('auth:api')->name('postStore');
+    Route::post('/update', [CommentController::class, 'update'])->middleware('auth:api')->name('postStore');
+});
+
+

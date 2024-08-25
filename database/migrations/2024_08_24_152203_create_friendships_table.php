@@ -11,6 +11,7 @@ class CreateFriendshipsTable extends Migration
     {
         Schema::create('friendships', function (Blueprint $table) {
             $table->id();
+            $table->integer('status')->default(0);
             $table->foreignId('from_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('to_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('time_stamp')->useCurrent();

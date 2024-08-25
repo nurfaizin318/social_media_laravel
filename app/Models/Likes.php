@@ -13,7 +13,6 @@ class Likes extends Model
 
     protected $fillable = [
         'post_id',
-        'comment_id',
         'user_id',
         'time_stamp',
     ];
