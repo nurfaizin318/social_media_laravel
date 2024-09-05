@@ -1,5 +1,11 @@
 
 
+mysql.server start
+
+mysql.server stop
+
+mysql.server restart
+
 - failed  database chahce
 php artisan cache:table
 php artisan migrate
