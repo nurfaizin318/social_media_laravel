@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comments;
+use App\Models\Notification;
+use App\Models\User;
 
 class CommentController extends ApiController
 {
@@ -20,7 +22,7 @@ class CommentController extends ApiController
             $comment['editable'] = $comment['user_id'] == $validated['user_id'];
         }
 
-        return response()->json($comments);
+        return $this->successResponse($comments, 'Success update comment', 200);
     }
 
     // Menampilkan komentar berdasarkan ID
@@ -34,15 +36,24 @@ class CommentController extends ApiController
     // Menyimpan komentar baru
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated= $request->validate([
             'post_id' => 'required|exists:posts,id',
             'user_id' => 'required|exists:users,id',
             'content' => 'required|string|max:1000',
         ]);
 
-        Comments::create($validatedData);
 
-        return $this->successResponse('', 'Success update comment', 200);
+        Comments::create($validated);
+        $user = User::find($validated['user_id'])->username;
+
+        $notif = new Notification;
+        $notif->  user_id = $validated['user_id'];
+        $notif->  post_id = $validated['post_id'];
+        $notif->  content = "$user mengomentari postingan anda";
+        $notif-> save();
+
+
+        return $this->successResponse($user, 'Success update comment', 200);
     }
 
     public function update(Request $request)

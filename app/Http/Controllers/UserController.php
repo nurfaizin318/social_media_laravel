@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Friendships;
 use App\Models\User;
+use App\Models\Posts;
 use Illuminate\Http\Request;
 
 class UserController extends ApiController
@@ -62,5 +64,16 @@ class UserController extends ApiController
 
         $user->delete();
         return response()->json(['message' => 'User deleted']);
+    }
+
+    public function summary($id){
+        $userIds = Friendships::where('status',1)->pluck('from_id');
+        $posts =  Posts::whereIn('user_id',$userIds)
+        ->orWhere('user_id',$id)
+        ->withCount(['comments','likes'])
+        ->get();
+      
+     
+        return response()->json($posts);
     }
 }

@@ -6,7 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendShipController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 Route::group([
     'middleware' => 'api',
@@ -56,10 +58,30 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'comment'
 ], function ($router) {
-    Route::post('/{id}', [CommentController::class, 'index'])->middleware('auth:api')->name('postStore');
-    Route::post('/store', [CommentController::class, 'store'])->middleware('auth:api')->name('postStore');
-    Route::delete('/{id}', [CommentController::class, 'destroy'])->middleware('auth:api')->name('postStore');
-    Route::post('/update', [CommentController::class, 'update'])->middleware('auth:api')->name('postStore');
+    Route::get('/{id}', [CommentController::class, 'index'])->middleware('auth:api')->name('postStore');
+    Route::post('/store', [CommentController::class, 'store'])->middleware('auth:api')->name('addComment');
+    Route::delete('/{id}', [CommentController::class, 'destroy'])->middleware('auth:api')->name('deleteComment');
+    Route::post('/update', [CommentController::class, 'update'])->middleware('auth:api')->name('updateComment');
 });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'message'
+], function ($router) {
+    Route::get('/{id}', [MessageController::class, 'index'])->middleware('auth:api')->name('showMessage');
+    Route::post('/send', [MessageController::class, 'store'])->middleware('auth:api')->name('storeMessage');
+    Route::get('/room/{room_id}', [MessageController::class, 'show'])->middleware('auth:api')->name('storeMessage');
+
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'user'
+], function ($router) {
+    Route::get('/{id}', [UserController::class, 'summary'])->middleware('auth:api')->name('getAllData');
+
+
+});
+
 
 

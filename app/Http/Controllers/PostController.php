@@ -13,8 +13,7 @@ class PostController extends ApiController
     {
 
         $posts = Posts::where('user_id', $id)
-        ->withCount('comments')
-        ->withCount('likes')
+        ->withCount(['comments','likes'])
         ->get();
         if (!$posts) {
             return response()->json(['message' => 'Post not found'], 404);

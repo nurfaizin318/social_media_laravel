@@ -15,7 +15,7 @@ class FriendShipController extends ApiController
     public function index()
     {
         // Mengambil semua data pertemanan
-        $friendships = Friendships::with(['user1', 'user2'])->get();
+        $friendships = Friendships::with(['from_id', 'to_id'])->get();
 
         return $this->successResponse($friendships, 'User created successfully', 201);
     }
@@ -43,30 +43,27 @@ class FriendShipController extends ApiController
     public function showRequestFrindship($id)
     {
         // Mengambil data pertemanan berdasarkan ID
-        $friendship = Friendships::where("to_id", $id)->get();
-
-        if (!$friendship) {
-            return response()->json(['message' => 'Friendship not found'], 404);
-        }
-
-        return response()->json($friendship);
-    }
-
-    public function showFriendList(Request $request)
-    {
-        $validator = $request->validate([
-            'user_id' => 'required',
-         ]);
-
-        $friendship = Friendships::where('user_id2','=',$validator['user_id'])
-        ->where('status','=',1)
+        $friendship = Friendships::where("to_id", $id)
+        ->where('status',0)
         ->get();
 
         if (!$friendship) {
             return response()->json(['message' => 'Friendship not found'], 404);
         }
 
-        return response()->json($friendship);
+        return $this->successResponse("","success get list request friend",200);
+    }
+
+    public function showFriendList($id)
+    {
+      
+        $friendships = Friendships::with(['userFrom'])->get();
+
+        if (!$friendships) {
+            return response()->json(['message' => 'Friendship not found'], 404);
+        }
+
+        return response()->json($friendships);
     }
 
     /**

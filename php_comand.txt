@@ -17,3 +17,15 @@ php artisan migrate:refresh
 php artisan route:list
 php artisan route:cache
 php artisan route:clear
+
+
+
+- migration 
+
+php artisan make:migration update_table_name --table=your_table_name
+php artisan migrate
+
+
+migrate:refresh: Menjalankan rollback pada semua migration kemudian menjalankannya kembali dari awal. Berguna untuk me-refresh seluruh database. ---> "php artisan migrate:refresh"
+
+migrate:rollback: Membatalkan (rollback) migration terakhir yang dijalankan. ---> "php artisan migrate:rollback"
